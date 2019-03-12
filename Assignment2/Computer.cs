@@ -11,7 +11,7 @@ namespace Assignment2
         readonly string iD;
         private static string lastID;
 
-        private bool? antenna;
+      
         private double? hardDriveCap;
         private int rAM;
         public int?[] licensesPerSoftware;
@@ -36,10 +36,10 @@ namespace Assignment2
 
 
         
-        public string ID { get { return iD } }
+        public string ID { get { return iD; } }
 
 
-        public bool Antenna { get; set; }
+        public bool? Antenna { get; set; }
 
         public double? HardDriveCap
         {
@@ -64,7 +64,7 @@ namespace Assignment2
             get
             {
                 int amount = rAM;
-                if (antenna==true)
+                if (Antenna==true)
                 {
                     amount = amount - 100;
                 }
@@ -72,16 +72,20 @@ namespace Assignment2
                 {
                     amount = amount - 50;
                 }
-                for (int c =0; c<licensesPerSoftware.Length; c++)
+                if (licensesPerSoftware != null)
                 {
-                    if (licensesPerSoftware[c].HasValue)
+                    for (int c = 0; c < licensesPerSoftware.Length; c++)
                     {
-                        if (licensesPerSoftware[c] > 0)
+                        if (licensesPerSoftware[c].HasValue)
                         {
-                            amount = amount + 10;
+                            if (licensesPerSoftware[c] > 0)
+                            {
+                                amount = amount - 10;
+                            }
                         }
                     }
                 }
+                return amount;
             }
             set
             {
@@ -90,6 +94,55 @@ namespace Assignment2
                     rAM = value;
                 }
             }
+        }
+        override
+        public String ToString()
+        {
+            StringBuilder output = new StringBuilder();
+
+            output.AppendLine("Computer #"+ iD+ " :");
+            if (Antenna!=null)
+            {
+                output.AppendLine("Has antenna: " + Antenna);
+            }
+            else
+            {
+                output.AppendLine("Cellular antenna not applicable for this device");
+            }
+            
+            if (HardDriveCap != null)
+            {
+                output.AppendLine("Hard drive capacity: " +HardDriveCap);
+            }
+            else
+            {
+                output.AppendLine("Not hard drive compatable");
+            }
+
+            output.AppendLine("RAM: " + RAM);
+
+            if (licensesPerSoftware!=null)
+            {
+                for(int c =0; c< licensesPerSoftware.Length; c++)
+                {
+                    if (licensesPerSoftware[c] != null)
+                    {
+                        output.AppendLine("Software " + c + 1 + " has " + licensesPerSoftware[c] + " licenses");
+                    }
+                    else
+                    {
+                        output.AppendLine("Software "+c+1+" is not installed"); 
+                    }
+                }
+            }
+            else
+            {
+                output.AppendLine("Device not equipped for extra storage");
+            }
+
+
+
+            return output.ToString();
         }
     }
 }
