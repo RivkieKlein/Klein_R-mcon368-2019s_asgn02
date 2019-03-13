@@ -23,6 +23,7 @@ namespace Assignment2
 
             Computer[] computers;
             int number;
+            int computersSoFar=0;
 
             Console.WriteLine("What is the maximum number of computers you need to track");
             GetIntFromUser(out number, 5, 20, 10);
@@ -38,9 +39,9 @@ namespace Assignment2
                 switch (choice)
                 {
                     case 1 :
-                        computers[number - 1] = getComputerInfo();
-                        Console.WriteLine("Computer added. ID is " + computers[number - 1].ID);
-                        number--;
+                        computers[computersSoFar] = getComputerInfo();
+                        Console.WriteLine("Computer added. ID is " + computers[computersSoFar].ID);
+                        computersSoFar++ ;
                         break;
 
                     case 2:
@@ -120,6 +121,70 @@ namespace Assignment2
                         break;
 
                     case 9:
+                        int totalRam=0;
+                        int numWithAntenna=0;
+                        int numWithoutAntenna=0;
+                        int numWithHardDrive=0;
+                        double totalHardDriveCap=0;
+                        int machinesWithAnySoftware = 0;
+                        int totalLicensesPerComputer = 0;
+                        int[] totalLicensesPerSoftware = { 0, 0, 0, 0, 0 };
+                        int[] totalCompsWithThisSoftwareInstalled = { 0, 0, 0, 0, 0 };
+                 
+
+                        for(int c =0; c<computersSoFar; c++)
+                        {
+                            //ram calculations
+                            totalRam += computers[c].RAM;
+
+                            //antenna calculations
+                            if (computers[c].Antenna != null)
+                            {
+                                if ((bool)computers[c].Antenna)
+                                {
+                                    numWithAntenna++;
+                                }
+                                else
+                                {
+                                    numWithoutAntenna++;
+                                }
+                                    
+                            }
+
+                            //hard drive calcs
+                            if (computers[c].HardDriveCap!=null)
+                            {
+                                numWithHardDrive++;
+                                totalHardDriveCap += (double)computers[c].HardDriveCap;
+                            }
+
+                            //software calcs
+                            if (computers[c].licensesPerSoftware != null)
+                            {
+                                machinesWithAnySoftware++;
+                                for(int i=0; i < 5; i++)
+                                {
+                                    if (computers[c].licensesPerSoftware[i] != null)
+                                    {
+                                        totalLicensesPerComputer += (int)computers[c].licensesPerSoftware[i];
+                                        totalLicensesPerSoftware[c] += (int)computers[c].licensesPerSoftware[c];
+                                        totalCompsWithThisSoftwareInstalled[c]++;
+                                    }
+                                }
+                            }
+                        }
+
+                        Console.WriteLine("Average RAM: "+totalRam / computersSoFar);
+                        Console.WriteLine("Percent of Antenna compatible computers that actually have antenna: "+((numWithAntenna / (numWithAntenna + numWithoutAntenna)) * 100) + "%");
+                        Console.WriteLine("Average hard drive capacity"+(totalHardDriveCap/numWithHardDrive));
+                        Console.WriteLine("Average number of software licenses per computer for those with software"+totalLicensesPerComputer/machinesWithAnySoftware);
+                        for(int r =0; r < 5; r++)
+                        {
+                            Console.WriteLine("Average licenses for computer "+r+1+": "+totalLicensesPerSoftware[r]/totalCompsWithThisSoftwareInstalled[r]);
+                        }
+                            
+                        Console.WriteLine(networkSpeed);
+                        Console.WriteLine(cloudStorage);
                         break;
 
                     case 10:
