@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Assignment2
 {
@@ -12,9 +11,10 @@ namespace Assignment2
         private static string lastID;
 
       
-        private double? hardDriveCap;
-        private int rAM;
+        private double? _hardDriveCap;
+        private int _RAM;
         public int?[] licensesPerSoftware;
+        public bool? Antenna { get; set; }
 
 
 
@@ -39,23 +39,20 @@ namespace Assignment2
         public string ID { get { return iD; } }
 
 
-        public bool? Antenna { get; set; }
+        
 
         public double? HardDriveCap
         {
             get
             {
-                return hardDriveCap;
+                return _hardDriveCap;
             }
             set
             {
                 if (value >= 0)
                 {
-                    hardDriveCap = value;
+                    _hardDriveCap = value;
                 }
-
-        
-                
             }
         }
 
@@ -63,7 +60,7 @@ namespace Assignment2
         {
             get
             {
-                int amount = rAM;
+                int amount = _RAM;
                 if (Antenna==true)
                 {
                     amount = amount - 100;
@@ -89,10 +86,7 @@ namespace Assignment2
             }
             set
             {
-                if (value >= 1000)
-                {
-                    rAM = value;
-                }
+                _RAM = value >= 1000 ? value : 1000;
             }
         }
         override
@@ -101,44 +95,25 @@ namespace Assignment2
             StringBuilder output = new StringBuilder();
 
             output.AppendLine("Computer #"+ iD+ " :");
-            if (Antenna!=null)
-            {
-                output.AppendLine("Has antenna: " + Antenna);
-            }
-            else
-            {
-                output.AppendLine("Cellular antenna not applicable for this device");
-            }
-            
-            if (HardDriveCap != null)
-            {
-                output.AppendLine("Hard drive capacity: " +HardDriveCap);
-            }
-            else
-            {
-                output.AppendLine("Not hard drive compatable");
-            }
-
+            output.AppendLine(Antenna != null ? "Has antenna: "+Antenna : "Cellular antenna not applicable for this device");
+            output.AppendLine(HardDriveCap != null ? "Hard drive capacity: " + HardDriveCap : "Not hard drive compatable");
             output.AppendLine("RAM: " + RAM);
+
 
             if (licensesPerSoftware!=null)
             {
-                for(int c =0; c< licensesPerSoftware.Length; c++)
+                for(int c =0; c< 5; c++)
                 {
-                    if (licensesPerSoftware[c] != null)
-                    {
-                        output.AppendLine("Software " + c + 1 + " has " + licensesPerSoftware[c] + " licenses");
-                    }
-                    else
-                    {
-                        output.AppendLine("Software "+c+1+" is not installed"); 
-                    }
+                   output.AppendLine(licensesPerSoftware[c] == null ? "Software " + ((c + 1)) + " is not installed" : "Software " + (c + 1) + " has "+licensesPerSoftware[c]+" installed");
+
                 }
             }
             else
             {
                 output.AppendLine("Device not equipped for extra storage");
             }
+
+            
 
 
 
